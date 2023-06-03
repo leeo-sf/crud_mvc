@@ -23,5 +23,10 @@ namespace crud_mvc.Service
             _context.Profissao.Add(obj);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Profissao> FindById(int id)
+        {
+            return await _context.Profissao.FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

@@ -31,5 +31,21 @@ namespace crud_mvc.Controllers
             await _profissaoService.Create(obj);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = await _profissaoService.FindById(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
     }
 }

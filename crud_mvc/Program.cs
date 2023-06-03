@@ -1,4 +1,16 @@
+using crud_mvc.Data;
+using crud_mvc.Service;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = "server=localhost;userid=root;password=root123;database=web_mvc";
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 30));
+
+builder.Services.AddDbContext<Context>(options =>
+    options.UseMySql(connectionString, serverVersion));
+
+builder.Services.AddScoped<PessoaService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -1,4 +1,5 @@
-﻿using crud_mvc.Service;
+﻿using crud_mvc.Models;
+using crud_mvc.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace crud_mvc.Controllers
@@ -16,6 +17,19 @@ namespace crud_mvc.Controllers
         {
             var listaDeProfissoes = await _profissaoService.ToList();
             return View(listaDeProfissoes);
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Profissao obj)
+        {
+            await _profissaoService.Create(obj);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

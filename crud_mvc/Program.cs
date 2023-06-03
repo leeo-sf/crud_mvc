@@ -11,6 +11,7 @@ builder.Services.AddDbContext<Context>(options =>
     options.UseMySql(connectionString, serverVersion));
 
 builder.Services.AddScoped<PessoaService>();
+builder.Services.AddScoped<ProfissaoService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

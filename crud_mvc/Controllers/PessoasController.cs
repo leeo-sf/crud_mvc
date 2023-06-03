@@ -1,4 +1,5 @@
-﻿using crud_mvc.Service;
+﻿using crud_mvc.Models;
+using crud_mvc.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace crud_mvc.Controllers

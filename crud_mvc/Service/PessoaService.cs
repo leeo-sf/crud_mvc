@@ -17,5 +17,11 @@ namespace crud_mvc.Service
         {
             return await _context.Pessoa.ToListAsync();
         }
+
+        public async Task Create(Pessoa obj)
+        {
+            _context.Pessoa.Add(obj);
+            await _context.SaveChangesAsync();
+        }
     }
 }

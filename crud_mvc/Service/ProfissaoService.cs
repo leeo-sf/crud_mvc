@@ -1,6 +1,7 @@
 ﻿using crud_mvc.Data;
 using crud_mvc.Models;
 using Microsoft.EntityFrameworkCore;
+using crud_mvc.Service.Exceptions;
 
 namespace crud_mvc.Service
 {
@@ -47,6 +48,20 @@ namespace crud_mvc.Service
             catch (DbUpdateConcurrencyException e)
             {
                 throw new Exception(e.Message);
+            }
+        }
+
+        public async Task Delete(int id)
+        {
+            try
+            {
+                var obj = await _context.Profissao.FindAsync(id);
+                _context.Profissao.Remove(obj);
+                await _context.SaveChangesAsync();
+            } // irá cair no catch se alguma pessoa tiver com a profissão que estamos tentando apagar
+            catch (DbUpdateException e)
+            {
+                throw new IntegrityException("Não é possível apagar a profissão, pois, tem pessoa (s) que dependem dessa profissão");
             }
         }
     }

@@ -1,10 +1,12 @@
 ﻿@model crud_mvc.Models.Profissao
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Deletar";
 }
 
 <h2>@ViewData["Title"]</h2>
+
+<h4>Tem certeza que deseja deletar?</h4>
 
 <div>
     <h4>Pessoa</h4>
@@ -24,9 +26,10 @@
             @Html.DisplayFor(model => model.Nome)
         </dd>
     </dl>
-</div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info">Edit</a>
-    <a asp-action="Index" class="btn btn-dark">Voltar</a>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Deletar" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-dark">Voltar</a>
+    </form>
 </div>

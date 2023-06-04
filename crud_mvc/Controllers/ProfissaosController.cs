@@ -1,6 +1,9 @@
 ﻿using crud_mvc.Models;
 using crud_mvc.Service;
 using Microsoft.AspNetCore.Mvc;
+using crud_mvc.Service.Exceptions;
+using crud_mvc.Models.ViewModels;
+using System.Diagnostics;
 
 namespace crud_mvc.Controllers
 {
@@ -82,6 +85,47 @@ namespace crud_mvc.Controllers
             {
                 return NotFound();
             }
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = await _profissaoService.FindById(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _profissaoService.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
         }
     }
 }

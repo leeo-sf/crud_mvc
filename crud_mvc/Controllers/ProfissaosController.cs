@@ -39,7 +39,7 @@ namespace crud_mvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
             }
 
             var obj = await _profissaoService.FindById(id.Value);
@@ -55,7 +55,7 @@ namespace crud_mvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
             }
 
             var obj = await _profissaoService.FindById(id.Value);
@@ -73,17 +73,17 @@ namespace crud_mvc.Controllers
         {
             if (id != obj.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id fornecido incompatível com o id do obj" });
             }
-            // testar edit
+            
             try
             {
                 await _profissaoService.Update(obj);
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception e)
+            catch (ApplicationException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
         }
 
@@ -91,13 +91,13 @@ namespace crud_mvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
             }
 
             var obj = await _profissaoService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
             }
 
             return View(obj);

@@ -37,7 +37,7 @@ namespace crud_mvc.Service
 
             if (!idExite)
             {
-                throw new Exception("Id não existe");
+                throw new NotFoundException("Id não encontrado");
             }
 
             try
@@ -47,7 +47,7 @@ namespace crud_mvc.Service
             }
             catch (DbUpdateConcurrencyException e)
             {
-                throw new Exception(e.Message);
+                throw new DbConcurrencyException(e.Message);
             }
         }
 

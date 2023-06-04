@@ -28,5 +28,26 @@ namespace crud_mvc.Service
         {
             return await _context.Profissao.FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task Update(Profissao obj)
+        {
+            // retorna true ou false se o id existe
+            var idExite = _context.Profissao.Any(x => x.Id == obj.Id);
+
+            if (!idExite)
+            {
+                throw new Exception("Id não existe");
+            }
+
+            try
+            {
+                _context.Update(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

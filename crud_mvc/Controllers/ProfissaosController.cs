@@ -47,5 +47,41 @@ namespace crud_mvc.Controllers
 
             return View(obj);
         }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = await _profissaoService.FindById(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Profissao obj)
+        {
+            if (id != obj.Id)
+            {
+                return BadRequest();
+            }
+            // testar edit
+            try
+            {
+                await _profissaoService.Update(obj);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
     }
 }

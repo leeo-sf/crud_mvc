@@ -15,7 +15,7 @@ namespace crud_mvc.Service
 
         public async Task<List<Pessoa>> ToList()
         {
-            return await _context.Pessoa.ToListAsync();
+            return await _context.Pessoa.OrderBy(x => x.Nome).ToListAsync(); ;
         }
 
         public async Task Create(Pessoa obj)

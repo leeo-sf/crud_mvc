@@ -14,7 +14,7 @@
             @Html.DisplayNameFor(model => model.Cpf)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Cpf)
+            @Model.FormataCpf().ToString()
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Nome)

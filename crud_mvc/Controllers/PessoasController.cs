@@ -35,6 +35,11 @@ namespace crud_mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PessoaFormView obj)
         {
+            if (obj.Pessoa.ValidaCPF())
+            {
+                return RedirectToAction(nameof(Error), new { message = "CPF inválido. Digite somente os números do CPF válido!" });
+            }
+
             obj.Pessoa.GeraIdade(obj.Pessoa.DataNascimento);
             await _pessoaService.Create(obj.Pessoa);
             return RedirectToAction(nameof(Index));
@@ -80,6 +85,11 @@ namespace crud_mvc.Controllers
             if (id != obj.Pessoa.Id)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id fornecido incompatível com o id do obj" });
+            }
+
+            if (obj.Pessoa.ValidaCPF())
+            {
+                return RedirectToAction(nameof(Error), new { message = "CPF inválido. Digite somente os números do CPF válido!" });
             }
 
             try

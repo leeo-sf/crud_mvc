@@ -49,5 +49,104 @@ namespace crud_mvc.Models
         {
             Idade = DateTime.Now.Year - obj.Year;
         }
+
+        public string FormataCpf()
+        {
+            var newCpf = Cpf.Substring(0, 3) + "." + Cpf.Substring(3,3) + "." + Cpf.Substring(6,3) + "-" + Cpf.Substring(9,2);
+            return newCpf;
+        }
+
+        public bool ValidaCPF()
+        {
+            if (Cpf.Length != 11)
+            {
+                return true;
+            }
+            for (int count = 0; count < this.Cpf.Length; count++)
+            {
+                if (this.Cpf[count].ToString() == "-" || this.Cpf[count] == '/')
+                {
+                    throw new Exception("Digite somente os números do CPF.");
+                }
+            }
+
+            int[] mult1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int[] mult2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            string newCpf = this.Cpf.Substring(0, 9);
+            int total = 0;
+            int resto;
+            string digito;
+
+            for (int count = 0; count < 9; count++)
+            {
+                total += int.Parse(newCpf[count].ToString()) * mult1[count];
+            }
+            resto = total % 11;
+            if (resto < 2)
+            {
+                resto = 0;
+            }
+            else
+            {
+                resto = 11 - resto;
+            }
+            digito = resto.ToString();
+            newCpf += digito;
+            total = 0;
+
+            for (int count = 0; count < 10; count++)
+            {
+                total += int.Parse(newCpf[count].ToString()) * mult2[count];
+            }
+            resto = total % 11;
+            if (resto < 2)
+            {
+                resto = 0;
+            }
+            else
+            {
+                resto = 11 - resto;
+            }
+            digito = resto.ToString();
+            newCpf += digito;
+
+            if (!(this.Cpf == newCpf && this.ConfereSequencia(newCpf)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool ConfereSequencia(string cpf)
+        {
+            switch (cpf)
+            {
+                case "11111111111":
+                    return false;
+                case "00000000000":
+                    return false;
+                case "2222222222":
+                    return false;
+                case "33333333333":
+                    return false;
+                case "44444444444":
+                    return false;
+                case "55555555555":
+                    return false;
+                case "66666666666":
+                    return false;
+                case "77777777777":
+                    return false;
+                case "88888888888":
+                    return false;
+                case "99999999999":
+                    return false;
+                default:
+                    return true;
+            }
+        }
     }
 }

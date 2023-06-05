@@ -45,7 +45,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Cpf)
+                    @item.FormataCpf().ToString()
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Nome)

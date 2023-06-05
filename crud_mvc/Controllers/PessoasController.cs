@@ -1,6 +1,7 @@
 ﻿using crud_mvc.Models;
 using crud_mvc.Models.ViewModels;
 using crud_mvc.Service;
+using crud_mvc.Service.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -88,6 +89,37 @@ namespace crud_mvc.Controllers
                 return RedirectToAction(nameof(Index));
             }
             catch (ApplicationException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
+            }
+
+            var obj = await _pessoaService.FindById(id.Value);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _pessoaService.Delete(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException e)
             {
                 return RedirectToAction(nameof(Error), new { message = e.Message });
             }

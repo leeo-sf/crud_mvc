@@ -27,7 +27,7 @@ namespace crud_mvc.Service
 
         public async Task<Pessoa> FindById(int id)
         {
-            return await _context.Pessoa.FirstOrDefaultAsync(obj => obj.Id == id);
+            return await _context.Pessoa.Include(x => x.Profissao).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
         public async Task Edit(Pessoa obj)
@@ -46,6 +46,20 @@ namespace crud_mvc.Service
             catch (DbUpdateConcurrencyException e)
             {
                 throw new DbConcurrencyException(e.Message);
+            }
+        }
+
+        public async Task Delete(int id)
+        {
+            try
+            {
+                var obj = await _context.Pessoa.FindAsync(id);
+                _context.Pessoa.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new IntegrityException(e.Message);
             }
         }
     }

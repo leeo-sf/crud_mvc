@@ -55,6 +55,44 @@ namespace crud_mvc.Controllers
             return View(obj);
         }
 
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não fornecido" });
+            }
+
+            var obj = await _pessoaService.FindById(id.Value);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
+            }
+            var listaProfissoes = await _profissaoService.ToList();
+            PessoaFormView viewModel = new PessoaFormView { Pessoa = obj, Profissao = listaProfissoes };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, PessoaFormView obj)
+        {
+            if (id != obj.Pessoa.Id)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id fornecido incompatível com o id do obj" });
+            }
+
+            try
+            {
+                obj.Pessoa.GeraIdade(obj.Pessoa.DataNascimento);
+                await _pessoaService.Edit(obj.Pessoa);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+        }
+
         public IActionResult Error(string message)
         {
             var viewModel = new ErrorViewModel

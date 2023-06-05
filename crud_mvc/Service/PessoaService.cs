@@ -1,6 +1,7 @@
 ﻿using crud_mvc.Data;
 using crud_mvc.Models;
 using Microsoft.EntityFrameworkCore;
+using crud_mvc.Service.Exceptions;
 
 namespace crud_mvc.Service
 {
@@ -27,6 +28,25 @@ namespace crud_mvc.Service
         public async Task<Pessoa> FindById(int id)
         {
             return await _context.Pessoa.FirstOrDefaultAsync(obj => obj.Id == id);
+        }
+
+        public async Task Edit(Pessoa obj)
+        {
+            bool idExiste = await _context.Pessoa.AnyAsync(x => x.Id == obj.Id);
+            if (!idExiste)
+            {
+                throw new NotFoundException("Id não encontrado");
+            }
+
+            try
+            {
+                _context.Update(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                throw new DbConcurrencyException(e.Message);
+            }
         }
     }
 }

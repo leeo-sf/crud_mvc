@@ -14,6 +14,8 @@ builder.Services.AddDbContext<Context>(options =>
 
 builder.Services.AddScoped<PessoaService>();
 builder.Services.AddScoped<ProfissaoService>();
+builder.Services.AddScoped<GeneroService>();
+builder.Services.AddScoped<EstadoService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

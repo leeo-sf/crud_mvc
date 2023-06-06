@@ -24,7 +24,9 @@
 
             <div class="form-group">
                 <label asp-for="Pessoa.Genero" class="control-label"></label>
-                <select asp-for="Pessoa.Genero" asp-items="Html.GetEnumSelectList<@crud_mvc.Models.Enums.Generos>()" class="form-control"></select>
+                <!--asp-items constroi uma caixa de seleção com base na lista informada-->
+                <!--1arg- fonte de dados da conleção 2arg- qual atributo será a chave 3arg- qual informação aparecerá para o usuário-->
+                <select asp-for="Pessoa.GeneroId" asp-items="@(new SelectList(Model.Genero,"Id","Nome"))" class="form-control"></select>
             </div>
 
             <div class="form-group">
@@ -41,7 +43,9 @@
 
             <div class="form-group">
                 <label asp-for="Pessoa.Estado" class="control-label"></label>
-                <select asp-for="Pessoa.Estado" asp-items="Html.GetEnumSelectList<@crud_mvc.Models.Enums.Estados>()" class="form-control"></select>
+                <!--asp-items constroi uma caixa de seleção com base na lista informada-->
+                <!--1arg- fonte de dados da conleção 2arg- qual atributo será a chave 3arg- qual informação aparecerá para o usuário-->
+                <select asp-for="Pessoa.EstadoId" asp-items="@(new SelectList(Model.Estado,"Id","Nome"))" class="form-control"></select>
             </div>
 
             <div class="form-group">

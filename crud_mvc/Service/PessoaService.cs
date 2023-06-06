@@ -16,7 +16,7 @@ namespace crud_mvc.Service
 
         public async Task<List<Pessoa>> ToList()
         {
-            return await _context.Pessoa.OrderBy(x => x.Nome).ToListAsync(); ;
+            return await _context.Pessoa.OrderBy(x => x.Nome).Include(x => x.Genero).Include(x => x.Estado).ToListAsync();
         }
 
         public async Task Create(Pessoa obj)
@@ -27,7 +27,7 @@ namespace crud_mvc.Service
 
         public async Task<Pessoa> FindById(int id)
         {
-            return await _context.Pessoa.Include(x => x.Profissao).FirstOrDefaultAsync(obj => obj.Id == id);
+            return await _context.Pessoa.Include(x => x.Profissao).Include(x => x.Genero).Include(x => x.Estado).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
         public async Task Edit(Pessoa obj)

@@ -9,5 +9,7 @@ namespace crud_mvc.Data
 
         public DbSet<Pessoa> Pessoa { get; set; }
         public DbSet<Profissao> Profissao { get; set; }
+        public DbSet<Genero> Genero { get; set; }
+        public DbSet<Estado> Estado { get; set; }
     }
 }

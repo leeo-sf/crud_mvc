@@ -16,3 +16,12 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.nenhum-cadastro{
+    margin: 20%;
+    text-align: center;
+}
+
+.title {
+    text-align: center;
+}

@@ -11,11 +11,15 @@ namespace crud_mvc.Controllers
     {
         private readonly PessoaService _pessoaService;
         private readonly ProfissaoService _profissaoService;
+        private readonly GeneroService _generoService;
+        private readonly EstadoService _estadoService;
 
-        public PessoasController(PessoaService pessoaService, ProfissaoService profissaoService)
+        public PessoasController(PessoaService pessoaService, ProfissaoService profissaoService, GeneroService generoService, EstadoService estadoService)
         {
             _pessoaService = pessoaService;
             _profissaoService = profissaoService;
+            _generoService = generoService;
+            _estadoService = estadoService;
         }
 
         public async Task<IActionResult> Index()
@@ -26,8 +30,10 @@ namespace crud_mvc.Controllers
 
         public async Task<IActionResult> Create()
         {
+            var listaDeEstados = await _estadoService.ToList();
             var listaDeProfissao = await _profissaoService.ToList();
-            var viewModel = new PessoaFormView { Profissao = listaDeProfissao };
+            var listaDeGenero = await _generoService.ToList();
+            var viewModel = new PessoaFormView { Profissao = listaDeProfissao, Genero = listaDeGenero, Estado = listaDeEstados };
             return View(viewModel);
         }
 
@@ -38,6 +44,11 @@ namespace crud_mvc.Controllers
             if (obj.Pessoa.ValidaCPF())
             {
                 return RedirectToAction(nameof(Error), new { message = "CPF inválido. Digite somente os números do CPF válido!" });
+            }
+
+            if (obj.Pessoa.ProfissaoId == 0)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Necessário informar uma profissão" });
             }
 
             obj.Pessoa.GeraIdade(obj.Pessoa.DataNascimento);
@@ -73,8 +84,10 @@ namespace crud_mvc.Controllers
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
             }
+            var listaDeEstados = await _estadoService.ToList();
             var listaProfissoes = await _profissaoService.ToList();
-            PessoaFormView viewModel = new PessoaFormView { Pessoa = obj, Profissao = listaProfissoes };
+            var listaDeGenero = await _generoService.ToList();
+            PessoaFormView viewModel = new PessoaFormView { Pessoa = obj, Profissao = listaProfissoes, Genero = listaDeGenero, Estado = listaDeEstados };
             return View(viewModel);
         }
 

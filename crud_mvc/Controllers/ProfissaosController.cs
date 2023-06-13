@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using crud_mvc.Service.Exceptions;
 using crud_mvc.Models.ViewModels;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace crud_mvc.Controllers
 {
+    //só pode entrar na classe se estiver logado
+    [Authorize]
     public class ProfissaosController : Controller
     {
         private readonly ProfissaoService _profissaoService;

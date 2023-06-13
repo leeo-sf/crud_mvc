@@ -11,5 +11,6 @@ namespace crud_mvc.Data
         public DbSet<Profissao> Profissao { get; set; }
         public DbSet<Genero> Genero { get; set; }
         public DbSet<Estado> Estado { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
     }
 }

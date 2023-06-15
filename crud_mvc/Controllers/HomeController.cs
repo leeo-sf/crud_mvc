@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using crud_mvc.Service;
+using System.Linq;
+using crud_mvc.Models.Enums;
 
 namespace crud_mvc.Controllers
 {
@@ -19,11 +21,10 @@ namespace crud_mvc.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var identity = (ClaimsIdentity)User.Identity;
-            IEnumerable<Claim> claims = identity.Claims;
-            var email = claims.First().Value;
-            var obj = await _context.FindByEmail(email);
-            return View(obj);
+            var obj = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value);
+            var email = obj.First();
+            var user = await _context.FindByEmail(email);
+            return View(user);
         }
 
         public async Task<IActionResult> LogOut()

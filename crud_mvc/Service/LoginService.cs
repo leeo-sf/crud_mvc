@@ -26,7 +26,7 @@ namespace crud_mvc.Service
 
         public async Task<Usuario> FindByEmail(string email)
         {
-            return await _context.Usuario.FirstOrDefaultAsync(x => x.Email == email);
+            return await _context.Usuario.Include(x => x.Categoria).FirstOrDefaultAsync(x => x.Email == email);
         }
     }
 }

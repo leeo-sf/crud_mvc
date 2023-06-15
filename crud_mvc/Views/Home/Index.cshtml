@@ -1,9 +1,17 @@
 ﻿@model crud_mvc.Models.Usuario
+@using crud_mvc.Models.Enums;
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Bem Vindo - @Model.Nome</h1>
+    @if (Model.Categoria.Id == (int)Categ.Admin)
+    {
+        <h1 class="display-4">Bem Vindo - Admin</h1>
+    }
+    else
+    {
+        <h1 class="display-4">Bem Vindo - @Model.Nome</h1>
+    }
 </div>

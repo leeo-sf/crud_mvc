@@ -5,6 +5,7 @@ using crud_mvc.Service.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace crud_mvc.Controllers
 {
@@ -24,13 +25,22 @@ namespace crud_mvc.Controllers
             _generoService = generoService;
             _estadoService = estadoService;
         }
-
+        
         public async Task<IActionResult> Index()
         {
             var listaDePessoas = await _pessoaService.ToList();
-            return View(listaDePessoas);
+            var obj = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value);
+            var role = obj.First();
+            var permission = false;
+            if (role == "1")
+            {
+                permission = true;
+            }
+            var viewModel = new PermissionFormView { Pessoa = listaDePessoas, Permission = permission };
+            return View(viewModel);
         }
 
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Create()
         {
             var listaDeEstados = await _estadoService.ToList();
@@ -40,8 +50,10 @@ namespace crud_mvc.Controllers
             return View(viewModel);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Create(PessoaFormView obj)
         {
             if (obj.Pessoa.ValidaCPF())
@@ -75,6 +87,7 @@ namespace crud_mvc.Controllers
             return View(obj);
         }
 
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -96,6 +109,7 @@ namespace crud_mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Edit(int id, PessoaFormView obj)
         {
             if (id != obj.Pessoa.Id)
@@ -120,6 +134,7 @@ namespace crud_mvc.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -138,6 +153,7 @@ namespace crud_mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Delete(int id)
         {
             try

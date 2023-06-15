@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using Microsoft.AspNetCore.CookiePolicy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,7 @@ builder.Services.AddAuthentication(
     .AddCookie(options =>
     {
         options.LoginPath = "/Access/Login";
+        options.AccessDeniedPath = new PathString("/Home/Index");
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
 
@@ -54,6 +56,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+    HttpOnly = HttpOnlyPolicy.Always
+});
 
 app.UseAuthentication();
 

@@ -5,6 +5,7 @@ using crud_mvc.Service.Exceptions;
 using crud_mvc.Models.ViewModels;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace crud_mvc.Controllers
 {
@@ -22,9 +23,18 @@ namespace crud_mvc.Controllers
         public async Task<IActionResult> Index()
         {
             var listaDeProfissoes = await _profissaoService.ToList();
-            return View(listaDeProfissoes);
+            var obj = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value);
+            var role = obj.First();
+            var permission = false;
+            if (role == "1")
+            {
+                permission = true;
+            }
+            var viewModel = new PermissionFormView { Profissao = listaDeProfissoes, Permission = permission };
+            return View(viewModel);
         }
 
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Create()
         {
             return View();
@@ -32,6 +42,7 @@ namespace crud_mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Create(Profissao obj)
         {
             await _profissaoService.Create(obj);
@@ -54,6 +65,7 @@ namespace crud_mvc.Controllers
             return View(obj);
         }
 
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,6 +84,7 @@ namespace crud_mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Edit(int id, Profissao obj)
         {
             if (id != obj.Id)
@@ -90,6 +103,7 @@ namespace crud_mvc.Controllers
             }
         }
 
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -108,6 +122,7 @@ namespace crud_mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> Delete(int id)
         {
             try

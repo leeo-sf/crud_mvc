@@ -38,21 +38,23 @@ namespace crud_mvc.Controllers
                 ViewData["ValidateMessage"] = "Usuário não encontrado";
                 return View();
             }
-            List<Claim> claims = new List<Claim>() {
-            new Claim(ClaimTypes.NameIdentifier, user.Email),
-            new Claim("OtherProperties", "Example Role") };
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, obj.Email));
+            claims.Add(new Claim(ClaimTypes.Role, obj.CategoriaId.ToString()));
 
-            ClaimsIdentity claimsIdentify = new ClaimsIdentity(claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsIdentity = new ClaimsIdentity(
+                new ClaimsIdentity(
+                    claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme));
 
-            AuthenticationProperties properties = new AuthenticationProperties()
+            var properties = new AuthenticationProperties
             {
-                AllowRefresh = true
-                //IsPersistent = user.ManterLogado
+                ExpiresUtc = DateTime.Now.AddHours(3),
+                IssuedUtc = DateTime.Now
             };
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
-                new ClaimsPrincipal(claimsIdentify), properties);
+                new ClaimsPrincipal(claimsIdentity), properties);
 
             return RedirectToAction("Index", "Home");
         }

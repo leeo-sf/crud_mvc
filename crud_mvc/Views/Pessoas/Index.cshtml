@@ -43,12 +43,9 @@ else
                 <th>
                     Idade
                 </th>
-                @if (Model.Permission)
-                {
-                    <th>
-                        Ação
-                    </th>
-                }
+                <th>
+                    Ação
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -81,6 +78,12 @@ else
                             <a asp-action="Edit" asp-route-id="@item.Id">Atualizar</a>
                             <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
                             <a asp-action="Delete" asp-route-id="@item.Id">Deletar</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
                         </td>
                     }
                 </tr>

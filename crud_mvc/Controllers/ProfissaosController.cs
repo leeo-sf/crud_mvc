@@ -26,7 +26,7 @@ namespace crud_mvc.Controllers
             var obj = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value);
             var role = obj.First();
             var permission = false;
-            if (role == "1")
+            if (role == "admin")
             {
                 permission = true;
             }
@@ -34,7 +34,7 @@ namespace crud_mvc.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create()
         {
             return View();
@@ -42,7 +42,7 @@ namespace crud_mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create(Profissao obj)
         {
             await _profissaoService.Create(obj);
@@ -65,7 +65,7 @@ namespace crud_mvc.Controllers
             return View(obj);
         }
 
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,7 +84,7 @@ namespace crud_mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, Profissao obj)
         {
             if (id != obj.Id)
@@ -103,7 +103,7 @@ namespace crud_mvc.Controllers
             }
         }
 
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -122,7 +122,7 @@ namespace crud_mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             try

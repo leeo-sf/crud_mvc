@@ -40,7 +40,7 @@ namespace crud_mvc.Controllers
             }
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, obj.Email));
-            claims.Add(new Claim(ClaimTypes.Role, obj.CategoriaId.ToString()));
+            claims.Add(new Claim(ClaimTypes.Role, obj.Categoria.Descricao));
 
             var claimsIdentity = new ClaimsIdentity(
                 new ClaimsIdentity(

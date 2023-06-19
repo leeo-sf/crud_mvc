@@ -19,7 +19,7 @@ namespace crud_mvc.Service
             bool senha = await _context.Usuario.AnyAsync(x => x.Senha == obj.Senha);
             if (email && senha)
             {
-                return await _context.Usuario.FirstOrDefaultAsync(x => x.Email == obj.Email);
+                return await _context.Usuario.Include(x => x.Categoria).FirstOrDefaultAsync(x => x.Email == obj.Email);
             }
             return null;
         }
